@@ -113,14 +113,47 @@ Directly converting this value to Int is unsafe.
 The statement:
 
 if let input = readLine(), let age = Int(input) {
-
-
 uses optional binding to safely:
  1 - unwrap user input
-
  2 - convert it to an integer
-
 The code inside the block executes only if both operations succeed.
 If either fails, Swift skips the block, preventing runtime crashes.
-
 This pattern ensures safe input handling and is a core Swift concept.
+
+
+Swift encourages safe input handling.
+Force unwrapping (!) and silent defaults (??) should be avoided.
+Optional binding (if let) ensures values exist and are valid before use, preventing crashes and logical errors.
+
+✅ Good Practice vs ❌ Bad Practice (Swift Input Handling)
+❌ Bad Practice (Unsafe & Misleading)
+let first = Int(readLine()!)
+let second = Int(readLine()!)
+
+if first! > second! {
+    print("First is greater")
+}
+
+
+Why this is bad: Force unwrap (!) can crash the program / Assumes user input is always valid / No input validation / Not acceptable in real apps
+
+💥 One wrong input = app crash
+
+⚠️ Bad Practice (Logical but Poor Design)
+let first = Int(readLine() ?? "") ?? 0
+let second = Int(readLine() ?? "") ?? 0
+
+
+Why this is weak: Invalid input silently becomes 0 / User mistakes go unnoticed / Debugging becomes harder
+
+⚠️ Works, but hides problems.
+
+✅ Good Practice (Recommended & Safe)
+if let firstInput = readLine(),
+   let first = Int(firstInput),
+   let secondInput = readLine(),
+   let second = Int(secondInput) {
+
+   }
+
+Why this is good: Safely unwraps input / Validates conversion / Handles user mistakes / No crashes / Clear logic flow
